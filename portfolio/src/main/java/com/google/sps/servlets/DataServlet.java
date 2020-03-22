@@ -15,18 +15,49 @@
 package com.google.sps.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
-@WebServlet("/data")
-public class DataServlet extends HttpServlet {
+
+/** Servlet that returns a random quote. */
+@WebServlet({"/random-quote","/data"})
+public final class DataServlet extends HttpServlet {
+  private int pageViews = 0;
+  private List<String> quotes;
+
+  @Override
+  public void init() {
+    quotes = new ArrayList<>();
+    quotes.add(
+        "A ship in port is safe, but that is not what ships are for. "
+            + "Sail out to sea and do new things. - Grace Hopper");
+    quotes.add("They told me computers could only do arithmetic. - Grace Hopper");
+    quotes.add("Don't mistake my kindness for weakness. I am kind to everyone, but when someone is unkind to me, weak is not what you are going to remember about me. - Al Capone");
+    quotes.add("It is much easier to apologise than it is to get permission. - Grace Hopper");
+    quotes.add("I have said many times in press conferences, but maybe not said it in front of him, Phil is the most, most, most talented player I have ever seen in my career as a manager. - Pep Guardiola");
+    quotes.add("I am in a charming state of confusion. - Ada Lovelace");
+    quotes.add(
+        "The Analytical Engine weaves algebraic patterns, "
+            + "just as the Jacquard loom weaves flowers and leaves. - Ada Lovelace");
+    quotes.add(
+        "Sometimes it is the people no one can imagine anything of "
+            + "who do the things no one can imagine. - John Gansallo");
+    quotes.add("Those who can imagine anything, can create the impossible. - Alan Turing");
+  }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    pageViews++;
+    String quote = quotes.get((int) (Math.random() * quotes.size()));
+
     response.setContentType("text/html;");
-    response.getWriter().println("<h1>Hello John!</h1>");
+    response.getWriter().println(quote);
+    response.getWriter().println("<h1>Page Views</h1>");
+    response.getWriter().println("<p>This page has been viewed " + pageViews + " times.</p>");
   }
 }
